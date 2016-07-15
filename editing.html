@@ -1,0 +1,17 @@
+<form data-ng-submit="updateItem($index)">
+  <h4>Editing: {{editableTodo.text}}</h4>
+  <div>
+    <label for="newItem">Edit Item: </label>
+    <input type="text" id="newItem" data-ng-model="editableTodo.text" placeholder=" ">
+  </div>
+  <br>
+  <div>
+    <label for="newItemDesc">Edit desc.: </label>
+    <input type="text" id="newItemDesc" data-ng-model="editableTodo.info" placeholder=" ">
+  </div>
+  <br>
+  <textarea id="details" data-ng-model="editableTodo.details" placeholder="Details"></textarea>
+  <br>
+  <button type="submit">OK</button>
+  <button type="button" ng-click="cancelEditing()">Cancel</button>
+</form>

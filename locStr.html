@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <script data-require="angularjs@1.5.0" data-semver="1.5.0" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.js"></script>
     <link href="css/style.css" rel="stylesheet" />
@@ -10,74 +9,58 @@
 <body data-ng-app="myApp">
 <div class="container" data-ng-controller="MyController">
 <aside>
-
-	<button type="button" data-ng-click="removeMulItem()">Remove {{remaining()}} items</button>
-	<br>
-	<ul >
-		<li data-ng-repeat="todo in todos track by $index" >
-			<input type="checkbox" data-ng-model="todo.done">
-			<h3 ng-click="showDetails(todo)" class="done-{{ todo.done }}">{{ todo.text }}</h3>
-			<br>
-			<button ng-click="removeSingleItem($index)"> &times;Delete </button>
-			<button ng-click="editItem($index)"> Edit </button>
-			<hr>
-		</li>
-
-	</ul>
-	<!-- CREATING -->
-	<br>
-	<br>
-
-	<div>
-	    <button type="button" ng-click="startCreating()">Create</button>
-	    <form  ng-show="isCreating" data-ng-submit="addItem()">
-			 <div>
-			    <label for="newItem">Enter new Item:</label>
-			    <input type="text" id="newItem" data-ng-model="todoText" placeholder="Enter item ">
-			</div>
-			<br>
-			<div>
-			    <label for="newItemDesc">Description: </label>
-			    <input type="text" id="newItemDesc" data-ng-model="todoInfo" placeholder="Enter description ">
-			</div>
-			<br>
-			<textarea id="details" data-ng-model="todoDetails" placeholder="Details"></textarea>
-			<br>
-			<input type="submit" value="OK" />
-			<button ng-click="cancelCreating()"> Cancel</button>
-		</form>
-	</div>
-	<br><br><br>
-
-     <!-- EDITING -->	
-		<form ng-show="isEditing" data-ng-submit ="updateItem($index)">
-		<h4>Editing: {{editableTodo.text}}</h4>
-			<div>
-				<label for="newItem">Edit Item: </label>
-				<input type="text" id="newItem" data-ng-model="editableTodo.text" placeholder=" ">
-			</div>
-			<br>
-			<div>
-				<label for="newItemDesc">Edit desc.: </label>
-				<input type="text" id="newItemDesc" data-ng-model="editableTodo.info" placeholder=" ">
-			</div>
-			<br>
-			<textarea id="details" data-ng-model="editableTodo.details" placeholder="Details"></textarea>
-			<br>
-			<button type="submit" >OK</button>
-			<button type="button" ng-click="cancelEditing()">Cancel</button>
-		</form>
-<br><br><br>
+  <button type="button" data-ng-click="removeMulItem()">Remove {{remaining()}} items</button>
+  <br>
+  <ul>
+    <li data-ng-repeat="todo in todos track by $index">
+      <input type="checkbox" data-ng-model="todo.done">
+      <h3 ng-click="showDetails(todo)" class="done-{{ todo.done }}">{{ todo.text }}</h3>
+      <br>
+      <button ng-click="removeSingleItem($index)"> &times;Delete </button>
+      <button ng-click="editItem($index)">Edit</button>
+      <hr>
+    </li>
+  </ul>
+  <!-- CREATING -->
+  <br><br>
+  <div>
+      <button type="button" ng-click="startCreating()">Create</button>
+      <form  ng-show="isCreating" data-ng-submit="addItem()">
+       <div>
+          <label for="newItem">Enter new Item:</label>
+          <input type="text" id="newItem" data-ng-model="todoText" placeholder="Enter item ">
+      </div>
+      <br>
+      <div>
+          <label for="newItemDesc">Description: </label>
+          <input type="text" id="newItemDesc" data-ng-model="todoInfo" placeholder="Enter description ">
+      </div>
+      <br>
+      <textarea id="details" data-ng-model="todoDetails" placeholder="Details"></textarea>
+      <br>
+      <input type="submit" value="OK" />
+      <button ng-click="cancelCreating()"> Cancel</button>
+    </form>
+  </div>
+  <br><br><br>
+  <!-- EDITING -->
+  <div ng-include="'editing.html'" ng-show="isEditing"></div>
 </aside>
+
 <div class="content">
+	<button ng-click="prevPage()">Prev</button>
+	<button ng-click="nextPage()">Next</button>
 	<div >
       <h1>{{ selectedItem.text }}</h1>
       <p>{{ selectedItem.info }}</p>
-      <p>{{selectedItem.details}}</p>
-   </div>		
-
-<button ng-click="prevPage()">Prev</button>
-<button ng-click="nextPage()">Next</button>
+      <p ng-hide="editorEnabled" ng-click="enableEditor()">{{selectedItem.details}}</p>
+      <div ng-show="editorEnabled">
+        <textarea ng-model="editableDetails" ng-show="editorEnabled"></textarea>
+  	      <a href="#" ng-click="save()">Save</a>
+  	      or
+  	      <a href="#" ng-click="disableEditor()">cancel</a>.
+      </div>
+    </div>	
 
 </div>
 </body>

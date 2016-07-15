@@ -1,114 +1,155 @@
-var app = angular.module("myApp", []); 
-app.controller("MyController",['$scope', '$http', function($scope, $http) {
+var app = angular.module("myApp", []);
+app.controller("MyController", ['$scope', '$http', function($scope, $http) {
 
-	$scope.saved = localStorage.getItem('todos');
-	$scope.todos = (localStorage.getItem('todos') !== null) ? JSON.parse($scope.saved) : [ {text: 'lorem', info: 'About Lorem', details: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam maxime blanditiis placeat exercitationem, tenetur minus ex sed officiis magni, pariatur officia ratione eaque voluptas.', done: false},
-																						   {text: 'lorem1', info: '1About Lorem', details: '1Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam maxime blanditiis placeat exercitationem, tenetur minus ex sed officiis magni, pariatur officia ratione eaque voluptas. ', done: false} ];
- 
-	localStorage.setItem('todos', JSON.stringify($scope.todos));
+  $scope.saved = localStorage.getItem('todos');
+  $scope.todos = (localStorage.getItem('todos') !== null) ? JSON.parse($scope.saved) : [{
+    text: 'lorem',
+    info: 'About Lorem',
+    details: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam maxime blanditiis placeat exercitationem, tenetur minus ex sed officiis magni, pariatur officia ratione eaque voluptas.',
+    done: false
+  }, {
+    text: 'lorem1',
+    info: '1About Lorem',
+    details: '1Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam maxime blanditiis placeat exercitationem, tenetur minus ex sed officiis magni, pariatur officia ratione eaque voluptas. ',
+    done: false
+  }];
 
-//Content
-	$scope.selectedItem = $scope.todos[0];
+  localStorage.setItem('todos', JSON.stringify($scope.todos));
 
-	 $scope.showDetails = function(item){
-      $scope.selectedItem = item;
-    };
+  //Show Content
+  $scope.selectedItem = $scope.todos[0];
 
-	$scope.editableTodo = {};
-//Add
-	$scope.addItem = function() {
-		 if ($scope.todoText && $scope.todoInfo) {
-			$scope.todos.push({
-				text: $scope.todoText, 
-				info: $scope.todoInfo, 
-				details: $scope.todoDetails,
-				done: false
-			});
-			$scope.todoText = ''; 
-			$scope.todoInfo = ''; 
-			$scope.todoDetails = ''; 
+  $scope.showDetails = function(item) {
+    $scope.selectedItem = item;
+  };
 
-			localStorage.setItem('todos', JSON.stringify($scope.todos));
-			$scope.cancelCreating();
-		}
-	};
-	$scope.cancelAdd = function() {
-		$scope.todoText = '';
-		$scope.todoInfo = ''; 
-	};
-//Edit
-	$scope.editItem = function(x) {
-		$scope.isEditing = true;
-		Object.assign($scope.editableTodo, $scope.todos[x], {index: x});
-	};
-	$scope.updateItem = function (x) {
-		if ($scope.editableTodo.text && $scope.editableTodo.info) {
-			var index = $scope.editableTodo.index;
-			delete $scope.editableTodo.index;
+  $scope.editableTodo = {};
 
-			Object.assign($scope.todos[index], $scope.editableTodo);
+  //Add
+  $scope.addItem = function() {
+    if ($scope.todoText && $scope.todoInfo) {
+      $scope.todos.push({
+        text: $scope.todoText,
+        info: $scope.todoInfo,
+        details: $scope.todoDetails,
+        done: false
+      });
+      $scope.todoText = '';
+      $scope.todoInfo = '';
+      $scope.todoDetails = '';
 
-			 $scope.isEditing = false;
-			$scope.editableTodo = {};
+      localStorage.setItem('todos', JSON.stringify($scope.todos));
+      $scope.cancelCreating();
+    }
+  };
+  $scope.cancelAdd = function() {
+    $scope.todoText = '';
+    $scope.todoInfo = '';
+  };
+  //Edit
+  $scope.editItem = function(x) {
+    $scope.isEditing = true;
+    $scope.isEditing1 = false;
+    /*$scope.todoText =$scope.todos[x].text;
+		$scope.todoInfo = $scope.todos[x].info;*/
+    Object.assign($scope.editableTodo, $scope.todos[x], {
+      index: x
+    });
+  };
 
-		}
-		localStorage.setItem('todos', JSON.stringify($scope.todos));
-	};
-	$scope.remaining = function() {
-		var count = 0;
-		angular.forEach($scope.todos, function(todo){
-			count+= todo.done ? 1 : 0;
-		});
-		return count;
-	};
-	$scope.isCreating = false;
-//Remove Item
-	$scope.removeMulItem = function() {
-		var oldTodos = $scope.todos;
-		$scope.todos = [];
-		angular.forEach(oldTodos, function(todo){
-			if (!todo.done)
-				$scope.todos.push(todo);
-		});
-		localStorage.setItem('todos', JSON.stringify($scope.todos));
-	};
-	$scope.removeSingleItem = function(x) {
-		$scope.todos.splice(x, 1);
-        localStorage.setItem('todos', JSON.stringify($scope.todos));
-	};
-// Create Item
-	$scope.startCreating = function() {
-		$scope.isCreating = true;
-	};
+  $scope.updateItem = function(x) {
+    if ($scope.editableTodo.text && $scope.editableTodo.info) {
+      /*	$scope.todos[x].text = $scope.todoText;
+			$scope.todos[x].info = $scope.todoInfo;
+        */
+      var index = $scope.editableTodo.index;
+      delete $scope.editableTodo.index;
 
-	$scope.cancelCreating = function() {
-		$scope.isCreating = false;
-		$scope.cancelAdd();
-	};
-	$scope.startEditing = function() {
-          $scope.isEditing = true;
-      };
-    $scope.cancelEditing = function() {
-          $scope.isEditing = false;
-          $scope.editableTodo = {};         
-      };
-      //next/prev
-      $scope.currentPage = 0;
+      Object.assign($scope.todos[index], $scope.editableTodo);
 
-	  $scope.prevPage = function() {
-        if ($scope.currentPage > 0) {
-            $scope.currentPage--;    
-      }
-       var next = $scope.currentPage;
-       $scope.selectedItem =  $scope.todos[next];
+      $scope.isEditing = false;
+      $scope.editableTodo = {};
+    }
+    localStorage.setItem('todos', JSON.stringify($scope.todos));
+  };
+  // Remaining
+  $scope.remaining = function() {
+    var count = 0;
+    angular.forEach($scope.todos, function(todo) {
+      count += todo.done ? 1 : 0;
+    });
+    return count;
+  };
+  //Remove Multiple Item
+  $scope.removeMulItem = function() {
+    var oldTodos = $scope.todos;
+    $scope.todos = [];
+    angular.forEach(oldTodos, function(todo) {
+      if (!todo.done)
+        $scope.todos.push(todo);
+    });
+    localStorage.setItem('todos', JSON.stringify($scope.todos));
+  };
+  // REmove Single Item
+  $scope.removeSingleItem = function(x) {
+    $scope.todos.splice(x, 1);
+    localStorage.setItem('todos', JSON.stringify($scope.todos));
+  };
+  // Create Item
+  $scope.isCreating = false;
 
-      };
-      $scope.nextPage = function() {
-        if ($scope.currentPage < $scope.todos.length-1) {
-            $scope.currentPage++;
-      }
-      var next = $scope.currentPage;
-      $scope.selectedItem =  $scope.todos[next];  
-    };
+  $scope.startCreating = function() {
+    $scope.isCreating = true;
+  };
 
-  }]);
+  $scope.cancelCreating = function() {
+    $scope.isCreating = false;
+    $scope.cancelAdd();
+  };
+  // Edit Item
+  $scope.startEditing = function() {
+    // $scope.isCreating = false;
+    $scope.isEditing = true;
+    $scope.isEditing1 = true; //
+  };
+  $scope.cancelEditing = function() {
+    $scope.isEditing = false;
+    $scope.isEditing1 = false; //
+    $scope.editableTodo = {};
+  };
+  //next/prev page
+  $scope.currentPage = 0;
+  $scope.prevPage = function() {
+    if ($scope.currentPage > 0) {
+      $scope.currentPage--;
+    }
+    var next = $scope.currentPage;
+    $scope.selectedItem = $scope.todos[next];
+  };
+  $scope.nextPage = function() {
+    if ($scope.currentPage < $scope.todos.length - 1) {
+      $scope.currentPage++;
+    }
+    var next = $scope.currentPage;
+    $scope.selectedItem = $scope.todos[next];
+
+  };
+
+$scope.editorEnabled = false;
+  
+  $scope.enableEditor = function() {
+    $scope.editorEnabled = true;
+    $scope.editableDetails = $scope.selectedItem.details;
+  };
+  
+  $scope.disableEditor = function() {
+    $scope.editorEnabled = false;
+  };
+  
+  $scope.save = function() {
+    $scope.selectedItem.details = $scope.editableDetails;
+    $scope.disableEditor();
+    localStorage.setItem('todos', JSON.stringify($scope.todos));
+  };
+  
+}]);
