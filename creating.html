@@ -1,0 +1,9 @@
+<form  data-ng-submit="addItem()">
+    <h2>Create new Event</h2>
+
+    <input type="text" id="newItem" data-ng-model="todoText" placeholder="Enter item ">
+    <textarea id="details" data-ng-model="todoDetails" placeholder="Details"></textarea>
+
+    <button type="submit">Save</button>
+    <button ng-click="cancelCreating()">Cancel</button>
+</form>
